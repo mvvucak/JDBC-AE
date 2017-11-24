@@ -1,0 +1,22 @@
+
+
+--Member(Membership number, fname, lname, member type, phone number, email)
+CREATE TABLE member(memid integer, fname varchar(20), lname varchar(20), memtype varchar(20), phone integer, email varchar(30) CONSTRAINT pkey PRIMARY KEY (memid));
+
+--Instructor(Instructor Number, Email, Name)
+CREATE TABLE instructor (instructorNumber integer, email varchar(30), fname varchar(20), lname varchar (20), CONSTRAINT pkey PRIMARY KEY(instructorNumber));
+
+--Course(Course ID, Name, Capacity, Day, Time, Cost, Instructor ID)
+CREATE TABLE course (courseid integer, name varchar(30), capacity integer, day varchar(10), time time, cost integer, instructor integer, CONSTRAINT pkey PRIMARY KEY(courseid), CONSTRAINT course_ins FOREIGN KEY(instructor) REFERENCES instructor(instructorNumber));
+
+--Instructor Qualifications(Instructor Number, Qualification)
+CREATE TABLE instructorQualifications (instructor integer, qualification varchar(40), CONSTRAINT ins_qual FOREIGN KEY(instructor) REFERENCES instructor(instructorNumber));
+
+--Facility (Name, Cost)
+CREATE TABLE facility (type varchar(20), cost integer, CONSTRAINT facil_id PRIMARY KEY(type));
+
+--MemberCourse (Membership Number, Course ID)
+CREATE TABLE memberCourse (bookingNumber integer, memberid integer, courseid integer, CONSTRAINT book_key PRIMARY KEY(bookingNumber), CONSTRAINT crs_ref FOREIGN KEY(courseid) REFERENCES course(courseid), CONSTRAINT mem_ref FOREIGN KEY(memberid) REFERENCES member(memid));
+
+--FacilityHire(HireID, Time, Duration, Activity, Facility, MemberID)
+CREATE TABLE(hireID integer, time time, date date, duration integer, facility varchar(20), member integer, CONSTRAINT hire_id PRIMARY KEY(hireID), CONSTRAINT facil_ref FOREIGN KEY(facility) REFERENCES facility(type), CONSTRAINT mem_ref2 FOREIGN KEY(member) REFERENCES member(memid));

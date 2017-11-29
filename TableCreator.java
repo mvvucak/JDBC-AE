@@ -10,7 +10,7 @@ public class TableCreator {
 	
 	public TableCreator(DatabaseInteractor dint, String query)
 	{
-		ResultSet rs = dint.tableQuery(query);
+		ResultSet rs = dint.selectQuery(query);
 		try
 		{
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -18,6 +18,7 @@ public class TableCreator {
 			headings = populateHeadings(rsmd, cols);
 			rows = 40;
 			data = populateData(rs, rows);
+			dint.closeConnection();
 			
 		}
 		catch(SQLException e)
@@ -25,19 +26,7 @@ public class TableCreator {
 			e.printStackTrace();
 			System.err.println("Error executing query " + query);
 		}
-		/*for (int i = 0; i<cols;i++)
-		{
-			System.out.print(headings[i]+" ");
-		}
-		for(int i = 0; i<rows; i++)
-		{
-			System.out.println("");
-			System.out.print(data[i][1]+" ");
-			System.out.print(data[i][2]+" ");
-			System.out.print(data[i][3]+" ");
-			System.out.print(data[i][4]+" ");
-			System.out.println(data[i][5]+" ");
-		}*/
+		
 		results = new JTable(data, headings);
 	}
 	
@@ -67,7 +56,16 @@ public class TableCreator {
 			
 			for(int j=0;j<cols;j++)
 			{
-				temp[i][j] = rs.getString(j+1);
+				String datum = rs.getString(j+1);
+				if(datum == null)
+				{
+					temp[i][j] = "0";
+				}
+				else
+				{
+					temp[i][j] = datum;
+				}
+				
 			}
 			i++;
 		}
